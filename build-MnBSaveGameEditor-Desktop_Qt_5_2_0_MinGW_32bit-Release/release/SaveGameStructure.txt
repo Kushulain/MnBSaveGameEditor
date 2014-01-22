@@ -1,0 +1,269 @@
+//this is simply copy/paste of the savegame structure from the wiki : http://mbmodwiki.ollclan.eu/Savegame
+Type 	Count 	Field 	Condition 	Info 	SGoverride
+header 	1 	header 			REPLACE
+uint64 	1 	game_time 			REPLACE
+int32 	1 	random_seed 			REPLACE
+int32 	1 	save_mode 		0: saving allowed, 1: strict	REPLACE
+int32 	1 	combat_difficulty 	game.header.game_version > 1136 		REPLACE
+int32 	1 	combat_difficulty_friendlies 	game.header.game_version > 1136 		REPLACE
+int32 	1 	reduce_combat_ai 	game.header.game_version > 1136 		REPLACE
+int32 	1 	reduce_campaign_ai 	game.header.game_version > 1136 		REPLACE
+int32 	1 	combat_speed 	game.header.game_version > 1136 		REPLACE
+int64 	1 	date_timer 			REPLACE
+int32 	1 	hour 			REPLACE
+int32 	1 	day 			REPLACE
+int32 	1 	week 			REPLACE
+int32 	1 	month 			REPLACE
+int32 	1 	year 			REPLACE
+int32 	1 	unused 			DONTREPLACE
+float 	1 	global_cloud_amount 			REPLACE
+float 	1 	global_haze_amount 			REPLACE
+float 	1 	average_difficulty 			REPLACE
+float 	1 	average_difficulty_period 			REPLACE
+string 	1 	unused 			DONTREPLACE
+bool 	1 	unused 			DONTREPLACE
+int32 	1 	tutorial_flags 			REPLACE
+int32 	1 	default_prisoner_price 			REPLACE
+int32 	1 	encountered_party_1_id 			REPLACE_BY_PARTY_ID
+int32 	1 	encountered_party_2_id 			REPLACE_BY_PARTY_ID
+int32 	1 	current_menu_id 			REPLACE
+int32 	1 	current_site_id 			REPLACE
+int32 	1 	current_entry_no 			REPLACE
+int32 	1 	current_mission_template_id 			REPLACE
+int32 	1 	party_creation_min_random_value 			REPLACE
+int32 	1 	party_creation_max_random_value 			REPLACE
+string 	1 	game_log 			CLEAR
+int32 	6 	unused 			DONTREPLACE
+int64 	1 	unused 			DONTREPLACE
+float 	1 	rest_period 			REPLACE
+int32 	1 	rest_time_speed 			REPLACE
+int32 	1 	rest_is_interactive 			REPLACE
+int32 	1 	rest_remain_attackable 			REPLACE
+string 	9 	class_names 			DONTREPLACE
+int32 	1 	num_global_variables 			DONTREPLACE
+int64 	num_global_variables 	global_variables 			DONTREPLACE
+int32 	1 	num_triggers 			DONTREPLACE
+trigger 	num_triggers 	triggers 			DONTREPLACE
+int32 	1 	num_simple_triggers 			DONTREPLACE
+simple_trigger 	num_simple_triggers 	simple_triggers 			DONTREPLACE
+int32 	1 	num_quests 			DONTREPLACE
+quest 	num_quests 	quests 			REPLACE_BY_QUEST_ID
+int32 	1 	num_info_pages 			DONTREPLACE
+info_page 	num_info_pages 	info_pages 			DONTREPLACE
+int32 	1 	num_sites 			DONTREPLACE
+site 	num_sites 	sites 			REPLACE_BY_SCENE_ID
+int32 	1 	num_factions 			DONTREPLACE
+faction 	num_factions 	factions 			REPLACE_BY_FACTION_ID
+int32 	1 	num_map_tracks 			DONTREPLACE
+map_track 	num_map_tracks 	map_tracks 			DONTREPLACE
+int32 	1 	num_party_templates 			DONTREPLACE
+party_template 	num_party_templates 	party_templates 			REPLACE_BY_PARTY_TEMPLATE_ID
+int32 	1 	num_party_records 			DONTREPLACE
+int32 	1 	num_parties_created 			DONTREPLACE
+party_record 	num_party_records 	party_records 			REPLACE_BY_PARTY_RECORD_ID
+player_party_stack 	player_party.num_stacks 	player_party_stack_additional_info 			REPLACE
+int32 	1 	num_map_event_records 			CLEAR
+int32 	1 	num_map_events_created 			DONTREPLACE
+map_event_record 	num_map_event_records 	map_event_records 			CLEAR
+int32 	1 	num_troops 			DONTREPLACE
+troop 	num_troops 	troops 			REPLACE_BY_TROOP_ID
+int32 	42 	unused 			DONTREPLACE
+int32 	1 	num_item_kinds 			DONTREPLACE
+item_kind 	num_item_kinds 	item_kind 			REPLACE_BY_ITEM_ID
+uint64 	1 	player_face_keys[0] 			REPLACE
+uint64 	1 	player_face_keys[1] 			REPLACE
+int32 	1 	player_kill_count 			REPLACE
+int32 	1 	player_wounded_count 			REPLACE
+int32 	1 	player_own_troop_kill_count 			REPLACE
+int32 	1 	player_own_troop_wounded_count 			REPLACE
+header
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	magic_number 		must be 0x52445257 (WRDR)	DONTREPLACE
+int32 	1 	game_version 			DONTREPLACE
+int32 	1 	module_version 			DONTREPLACE
+string 	1 	savegame_name 			REPLACE
+string 	1 	player_name 			REPLACE
+int32 	1 	player_level 			REPLACE
+float 	1 	date 			REPLACE
+note
+Type 	Count 	Field 	Condition 	Info
+string 	1 	text 			REPLACE
+int32 	1 	value 			REPLACE
+int32 	1 	tableau_material_id 			REPLACE
+bool 	1 	available 			REPLACE
+trigger
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	status 			DONTREPLACE
+int64 	1 	check_timer 			DONTREPLACE
+int64 	1 	delay_timer 			DONTREPLACE
+int64 	1 	rearm_timer 			DONTREPLACE
+simple_trigger
+Type 	Count 	Field 	Condition 	Info
+int64 	1 	check_timer 			DONTREPLACE
+quest
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	progression 			REPLACE
+int32 	1 	giver_troop_id 			REPLACE_BY_TROOP_ID
+int32 	1 	number 			REPLACE
+float 	1 	start_date 			REPLACE
+string 	1 	title 			REPLACE
+string 	1 	text 			REPLACE
+string 	1 	giver 			REPLACE
+note 	16 	notes 			DONTREPLACE
+int32 	1 	num_slots 			REPLACE
+int64 	num_slots 	slots 			REPLACE
+info_page
+Type 	Count 	Field 	Condition 	Info
+note 	16 	notes 			REPLACE
+site
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_slots 			DONTREPLACE
+int64 	num_slots 	slots 			DONTREPLACE
+faction
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_slots 			DONTREPLACE
+int64 	num_slots 	slots 			REPLACE
+float 	game.num_factions 	relations 			REPLACE
+string 	1 	name 			DONTREPLACE_EXCEPTPLAYERS
+bool 	1 	renamed 			DONTREPLACE_EXCEPTPLAYERS
+uint32 	1 	color 			REPLACE
+int32 	1 	unused 			DONTREPLACE
+note 	16 	notes 			DONTREPLACE
+map_track
+Type 	Count 	Field 	Condition 	Info
+float 	1 	position_x 			DONTREPLACE
+float 	1 	position_y 			DONTREPLACE
+float 	1 	position_z 			DONTREPLACE
+float 	1 	rotation 			DONTREPLACE
+float 	1 	age 			DONTREPLACE
+int32 	1 	flags 			DONTREPLACE
+party_template
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_parties_created 			DONTREPLACE
+int32 	1 	num_parties_destroyed 			REPLACE
+int32 	1 	num_parties_destroyed_by_player 			REPLACE
+int32 	1 	num_slots 			REPLACE
+int64 	num_slots 	slots 			REPLACE
+party_record
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	valid 			DONTREPLACE
+int32 	1 	raw_id 	valid == 1 		DONTREPLACE
+int32 	1 	id 	valid == 1 		DONTREPLACE
+party 	1 	party 	valid == 1 		REPLACE
+party
+Type 	Count 	Field 	Condition 	Info
+string 	1 	id 			DONTREPLACE
+string 	1 	name 			DONTREPLACE_EXCEPTPLAYERS
+uint64 	1 	flags 			DONTREPLACE
+int32 	1 	menu_id 			DONTREPLACE
+int32 	1 	party_template_id 			DONTREPLACE
+int32 	1 	faction_id 			REPLACE_BY_FACTION_ID
+int32 	1 	personality 			DONTREPLACE
+int32 	1 	default_behavior 			DONTREPLACE
+int32 	1 	current_behavior 			REPLACE
+int32 	1 	default_behavior_object_id 			DONTREPLACE
+int32 	1 	current_behavior_object_id 			REPLACE
+float 	1 	initial_position_x 			REPLACE
+float 	1 	initial_position_y 			REPLACE
+float 	1 	target_position_x 			REPLACE
+float 	1 	target_position_y 			REPLACE
+float 	1 	position_x 			REPLACE
+float 	1 	position_y 			REPLACE
+float 	1 	position_z 			REPLACE
+int32 	1 	num_stacks 			REPLACE
+party_stack 	num_stacks 	stacks 			REPLACE
+float 	1 	bearing 			REPLACE
+bool 	1 	renamed 			REPLACE
+string 	1 	extra_text 			DONTREPLACE
+float 	1 	morale 			REPLACE
+float 	1 	hunger 			REPLACE
+float 	1 	unused 			DONTREPLACE
+float 	1 	patrol_radius 			DONTREPLACE
+float 	1 	initiative 			DONTREPLACE
+float 	1 	helpfulness 			DONTREPLACE
+int32 	1 	label_visible 			DONTREPLACE
+float 	1 	bandit_attraction 			DONTREPLACE
+int32 	1 	marshall 	(game.header.game_version >= 900 && game.header.game_version < 1000) || game.header.game_version >= 1020 		REPLACE
+int64 	1 	ignore_player_timer 			DONTREPLACE
+int32 	1 	banner_map_icon_id 			DONTREPLACE
+int32 	1 	extra_map_icon_id 	game.header.game_version > 1136 		DONTREPLACE
+float 	1 	extra_map_icon_up_down_distance 	game.header.game_version > 1136 		DONTREPLACE
+float 	1 	extra_map_icon_up_down_frequency 	game.header.game_version > 1136 		DONTREPLACE
+float 	1 	extra_map_icon_rotate_frequency 	game.header.game_version > 1136 		DONTREPLACE
+float 	1 	extra_map_icon_fade_frequency 	game.header.game_version > 1136 		DONTREPLACE
+int32 	1 	attached_to_party_id 			DONTREPLACE
+bool 	1 	is_attached 			CLEAR
+int32 	1 	num_attached_party_ids 			CLEAR
+int32 	num_attached_party_ids 	attached_party_ids 			CLEAR
+int32 	1 	num_particle_system_ids 			DONTREPLACE
+int32 	num_particle_system_ids 	particle_system_ids 			DONTREPLACE
+note 	16 	notes 			DONTREPLACE
+int32 	1 	num_slots 			DONTREPLACE
+int64 	num_slots 	slots 			REPLACE
+party_stack
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	troop_id 			REPLACE_BY_TROOP_ID
+int32 	1 	num_troops 			REPLACE
+int32 	1 	num_wounded_troops 			REPLACE
+int32 	1 	flags 			REPLACE
+player_party_stack
+Type 	Count 	Field 	Condition 	Info
+float 	1 	experience 	 !(cur_stack_troop_flags & hero) 		REPLACE
+int32 	1 	num_upgradeable 	 !(cur_stack_troop_flags & hero) 		REPLACE
+int32 	32 	troop_dnas 	cur_stack_no < 32 && !(cur_stack_troop_flags & hero) 		REPLACE
+map_event_record
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	valid 			DONTREPLACE
+int32 	1 	id 	valid == 1 		DONTREPLACE
+map_event 	1 	map_event 	valid == 1 		DONTREPLACE
+map_event
+Type 	Count 	Field 	Condition 	Info
+string 	1 	unused 			DONTREPLACE
+int32 	1 	type 			DONTREPLACE
+float 	1 	position_x 			DONTREPLACE
+float 	1 	position_y 			DONTREPLACE
+float 	1 	land_position_x 			DONTREPLACE
+float 	1 	land_position_y 			DONTREPLACE
+float 	1 	unused 			DONTREPLACE
+float 	1 	unused 			DONTREPLACE
+int32 	1 	attacker_party_id 			DONTREPLACE
+int32 	1 	defender_party_id 			DONTREPLACE
+int64 	1 	battle_simulation_timer 			DONTREPLACE
+float 	1 	next_battle_simulation 			DONTREPLACE
+troop
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_slots 			REPLACE
+int64 	num_slots 	slots 			REPLACE
+int32 	4 	attributes 			REPLACE
+float 	7 	proficiencies 			REPLACE
+uint32 	6 	skills 			REPLACE
+note 	16 	notes 			REPLACE
+uint64 	1 	flags 			DONTREPLACE
+int32 	1 	site_id_and_entry_no 			REPLACE
+int32 	1 	skill_points 			REPLACE
+int32 	1 	attribute_points 			REPLACE
+int32 	1 	proficiency_points 			REPLACE
+int32 	1 	level 			REPLACE
+uint32 	1 	gold 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE
+int32 	1 	experience 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE
+float 	1 	health 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE
+int32 	1 	faction_id 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE_BY_FACTION_ID
+item 	96 	inventory_items 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE
+item 	10 	equipped_items 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		REPLACE
+uint64 	4 	face_keys 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		DONTREPLACE_EXCEPTPLAYERS
+bool 	1 	renamed 	(flags & tf_hero) || dont_load_regular_troop_inventories == false 		DONTREPLACE
+string 	1 	name 	renamed == true && ((flags & tf_hero) || dont_load_regular_troop_inventories == false) 		DONTREPLACE
+string 	1 	name_plural 	renamed == true && ((flags & tf_hero) || dont_load_regular_troop_inventories == false) 		DONTREPLACE
+int32 	1 	class_no 			REPLACE_EXCEPTPLAYERS
+item
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	item_kind_id 			REPLACE_BY_ITEM_ID
+int32 	1 	item_flags 		modifier = (item_flags >> 24) & 0xFF, ammo = item_flags & 0xFF, hit_points = item_flags & 0xFFFF	REPLACE
+item_kind
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_slots 			REPLACE
+int64 	num_slots 	slots 			REPLACE
+string
+Type 	Count 	Field 	Condition 	Info
+int32 	1 	num_chars 			REPLACE
+char 	num_chars 	text 			REPLACE
