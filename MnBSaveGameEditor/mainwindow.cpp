@@ -8,7 +8,8 @@ MainWindow::MainWindow(
                             map<string,string>* aConditionalValueSave,
                             map<string,int64_t>* aWatchedValues,
                             vector<string>* amodINIValues,
-                            SlotsInfos* aSlotsInfos) : QWidget()
+                            SlotsInfos* aSlotsInfos,
+                            map<string,int>* aGlobalVarBehaviours) : QWidget()
 {
 
 
@@ -21,6 +22,7 @@ MainWindow::MainWindow(
     WatchedValues = aWatchedValues;
     modINIValues = amodINIValues;
     slotsInfos = aSlotsInfos;
+    globalVarBehaviours = aGlobalVarBehaviours;
     modAToConvertIndex = 0;
     modBToConvertIndex = 0;
     createdCheckBoxes= false;
@@ -230,6 +232,13 @@ void MainWindow::LoadSave()
     lastModDirectory = ModPath->text();
     lastSaveDirectory = SGPath->text();
 
+    if (lastModDirectory == "Path to Module Directory File (e.g. : Steam\\SteamApps\\common\\MountBlade Warband\\Modules\\HairyVikingMod)" ||
+        lastSaveDirectory == "Path to SaveGame File (e.g. : MyDocuments\\Mount&Blade Warband Savegames\\HairyVikingMod)")
+    {
+        InfoLog("Wrong path");
+        return;
+    }
+
     SaveGameInfos* SG = new SaveGameInfos(ModPath->text().toStdString(),
                                           SGPath->text().toStdString(),
                                           *SGStructure,
@@ -238,7 +247,8 @@ void MainWindow::LoadSave()
                                           *WatchedValues,
                                           modINIValues,
                                           &progress,
-                                          slotsInfos);
+                                          slotsInfos,
+                                          globalVarBehaviours);
 
 
     if (SG->loadedSuccefully)
@@ -1004,8 +1014,8 @@ void MainWindow::ConvertSave()
         return;
     }
 
-    cout << "Ids : " << modAToConvertIndex << " , " << modBToConvertIndex << endl;
-    cout << "converting : " << (saves[modAToConvertIndex]->name) << " to " << (saves[modBToConvertIndex]->name) << endl;
+    InfoLog("Ids : " << modAToConvertIndex << " , " << modBToConvertIndex);
+    InfoLog("converting : " << (saves[modAToConvertIndex]->name) << " to " << (saves[modBToConvertIndex]->name));
 
     QProgressDialog progress("Converting...", "Abort Copy", 0, 100, convertWindow);
     progress.setWindowModality(Qt::WindowModal);

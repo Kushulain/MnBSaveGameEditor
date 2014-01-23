@@ -7,13 +7,15 @@ SaveGameInfos::SaveGameInfos(string modDirectory, string SaveGamePath,
                              map<string,int64_t> aWatchedValues,
                              vector<string>* modINIValues,
                              QProgressDialog* aProgressBar,
-                             SlotsInfos* slotsInfos)
+                             SlotsInfos* slotsInfos,
+                             map<string,int>* aGlobalVars)
 {
 
     map<string,int64_t> watchedValues = aWatchedValues;
 
 
     loadedSuccefully = true;
+    SGCreated = false;
 
     InfoLog("");
     InfoLog("====LOADING MODULE FILES :");
@@ -31,7 +33,8 @@ SaveGameInfos::SaveGameInfos(string modDirectory, string SaveGamePath,
     InfoLog("");
     InfoLog("====LOADING SAVEGAME FILES :");
     InfoLog("");
-    savegame = new SaveGame(SaveGamePath, SGStructure, aTypeSize, aConditionalValueSave, watchedValues, modInfos, aProgressBar, slotsInfos);
+    savegame = new SaveGame(SaveGamePath, SGStructure, aTypeSize, aConditionalValueSave, watchedValues, modInfos, aProgressBar, slotsInfos,aGlobalVars);
+    SGCreated = true;
 
     if (!savegame->loadedSuccefully)
     {
@@ -46,13 +49,20 @@ SaveGameInfos::SaveGameInfos(string modDirectory, string SaveGamePath,
         name = modName + "/" + savegameAddress;
     }
 
-    cout << "Done." << endl;
+    if (loadedSuccefully)
+    {
+        InfoLog("Done.");
+    }
+    else
+    {
+        ErrorLog("Couldn't load module or save game. Please insure your path are correct.");
+    }
 }
 
 SaveGameInfos::~SaveGameInfos()
 {
-    //
-    cout << "TESSSSSSSSSSSSSST" << endl;
-    delete(savegame);
+    if (SGCreated)
+        delete(savegame);
+
     delete(modInfos);
 }

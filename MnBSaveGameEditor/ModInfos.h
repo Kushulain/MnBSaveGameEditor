@@ -36,6 +36,7 @@ class ModInfos
         int64_t GetOthersPartyTemplateId(int64_t cur_id, ModInfos* Other);
         int64_t GetOthersItemId(int64_t cur_id, ModInfos* Other);
         int64_t GetOthersSceneId(int64_t cur_id, ModInfos* Other);
+        int64_t GetOthersGVarId(int64_t cur_id, ModInfos* Other);
 
         vector<string> troopStructure[6];
 

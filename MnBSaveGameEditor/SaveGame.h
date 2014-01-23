@@ -102,11 +102,11 @@ struct UserSettings
                 replace_party_lords = true;
                     replace_party_lords_position = true;
                     replace_party_lords_slots = true;
-                    replace_party_lords_troops = true;
+                    replace_party_lords_troops = false;
                 replace_party_towns = true;
                     replace_party_towns_position = false;
                     replace_party_towns_slots = true;
-                    replace_party_towns_troops = true;
+                    replace_party_towns_troops = false;
                     replace_party_lords_territories = true;
                     replace_party_player_territories = true;
 
@@ -128,11 +128,11 @@ struct UserSettings
                     replace_troop_player_slots = true;
                     replace_troop_player_equipment = true;
                 replace_troop_lords = true;
-                    replace_troop_lord_specs = true;
+                    replace_troop_lord_specs = false;
                     replace_troop_lord_slots = true;
                     replace_troop_lord_equipment = false;
                 replace_troop_ladies = true;
-                    replace_troop_lady_specs = true;
+                    replace_troop_lady_specs = false;
                     replace_troop_lady_slots = true;
                     replace_troop_lady_equipment = false;
                 replace_troop_heroes = true;
@@ -461,7 +461,8 @@ class SaveGame
                  map<string,int64_t> aWatchedValues,
                  ModInfos* aModInfos,
                  QProgressDialog* aProgressBar,
-                 SlotsInfos* aSlotsInfos);
+                 SlotsInfos* aSlotsInfos,
+                 map<string,int>* aGlobalVarBehaviours);
 
         virtual ~SaveGame();
 
@@ -491,6 +492,7 @@ class SaveGame
         int CombineBehaviours(int behaveParent, int behaveCurrent);
         void ShiftCurIdList(unsigned int position, int shiftAmount);
         int GetSlotBehave(int id, int slotType);
+        int GetGVarBehave(string name);
         void CleanPartyStack(List<SaveGameItem>& list);
 
 
@@ -512,6 +514,7 @@ class SaveGame
         map<string,int64_t> watchedValues;
         vector<unsigned int> playerTroopsIDs;
         SlotsInfos slotsInfos;
+        map<string,int> globalVarBehaviours;
 
         istringstream saveGameFile;
         uint64_t fileLength;

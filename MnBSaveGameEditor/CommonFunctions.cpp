@@ -10,9 +10,9 @@ void CommonFunctions::LogError(const string& msg)
 {
     if (LogLevel > 0)
         cout << "=============ERROR : " << msg << endl;
-    getchar();
+
     if (LogFile)
-        LogFile << msg << endl;
+        LogFile<< "=============ERROR : "  << msg << endl;
 }
 
 void CommonFunctions::LogWarning(const string& msg)
@@ -21,7 +21,7 @@ void CommonFunctions::LogWarning(const string& msg)
         cout << "======Warning : " << msg << endl;
 
     if (LogFile)
-        LogFile << msg << endl;
+        LogFile  << "======Warning : " << msg << endl;
 }
 
 void CommonFunctions::LogDebug(const string& msg)

@@ -25,7 +25,8 @@ SaveGame::SaveGame( string filePath,
                     map<string,int64_t> aWatchedValues,
                     ModInfos* aModInfos,
                     QProgressDialog* aProgressBar,
-                    SlotsInfos* aSlotsInfos)
+                    SlotsInfos* aSlotsInfos,
+                    map<string,int>* aGlobalVarBehaviours)
 {
     saveGameBodyName = "game";
 
@@ -35,6 +36,7 @@ SaveGame::SaveGame( string filePath,
     structureBlocks = SGStructure;
     progressBar = aProgressBar;
     slotsInfos = *aSlotsInfos;
+    globalVarBehaviours = *aGlobalVarBehaviours;
 
     browsingPlayers = false;
     browsingLords = false;
@@ -107,7 +109,7 @@ SaveGame::SaveGame( string filePath,
         ErrorLog("Unable to find savegame file : " << filePath);
     }
     saveGameFile.str("");
-    cout << "Input Count : " << inputsCount << endl;
+    InfoLog("Input Count : " << inputsCount);
 }
 
 SaveGame::~SaveGame()
@@ -470,7 +472,7 @@ void SaveGame::ReadAsBlock(string& blockType, string& blockName, unsigned int bl
                         {
                             progressBar->setValue(curPercentage);
                             progressBar->setLabelText(QString::fromStdString(path));
-                            cout << curPercentage << "% : " << path << " time : " << (float)clock()/CLOCKS_PER_SEC << endl;
+                            InfoLog(curPercentage << "% : " << path << " time : " << (float)clock()/CLOCKS_PER_SEC);
                             //cout << toLog << endl;
                             curPercentage++;
                         }
@@ -1143,7 +1145,7 @@ bool SaveGame::ExportData(string filePath)
     else
         return false;
 
-    cout << "import file size : " << saveGameFile.tellg() << " export size : " << saveGameExportFile.tellp() << endl;
+    InfoLog("import file size : " << saveGameFile.tellg() << " export size : " << saveGameExportFile.tellp());
 
 
     saveGameExportFile.close();
@@ -1187,7 +1189,7 @@ void SaveGame::ConvertFrom(SaveGameInfos* originalMod, UserSettings Settings)
     userSettings = Settings;
     originalSaveInfos = originalMod;
     vector<int> marker;
-    cout << "converting ..." << endl;
+    InfoLog("converting ...");
     marker.push_back(-1);
     curInputs = 0;
     ConvertItemList(originalMod->savegame->SaveGameData,marker);
@@ -1276,7 +1278,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersFactionId(k,modInfos);
             if (newId != k)
-                cout << "Faction " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Faction " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1314,7 +1318,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersPartyRecordId(k,modInfos);
             if (newId != k)
-                cout << "Party " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Party " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1323,7 +1329,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
             browsingPlayers = false;
             newId = originalSaveInfos->modInfos->GetOthersPartyTemplateId(k,modInfos);
             if (newId != k)
-                cout << "Party_Template " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Party_Template " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1333,7 +1341,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersQuestId(k,modInfos);
             if (newId != k)
-                cout << "Quest " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+               InfoLog("Quest " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1343,7 +1353,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersSceneId(k,modInfos);
             if (newId != k)
-                cout << "Site " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Site " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1390,7 +1402,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersTroopId(k,modInfos);
             if (newId != k)
-                cout << "Troop " << k << ":" << originalSaveInfos->modInfos->troops[k].infos["IDName"] <<  " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Troop " << k << ":" << originalSaveInfos->modInfos->troops[k].infos["IDName"] <<  " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1400,7 +1414,9 @@ void SaveGame::ConvertItemList(List<SaveGameItem>& curTree,vector<int>& marker, 
 
             newId = originalSaveInfos->modInfos->GetOthersItemId(k,modInfos);
             if (newId != k)
-                cout << "Item " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)) << endl;
+            {
+                InfoLog("Item " << k << " is now " << (newId == -666 ? "missing" : Int64ToString(newId)));
+            }
             if (newId == -666)
                 continue;
         }
@@ -1620,6 +1636,7 @@ unsigned int SaveGame::HandleFakeItem(List<SaveGameItem>& curTree, unsigned int 
         {
             int settingsBehave = REPLACE;
             int slotType = -1;
+            bool brownsingGVar = false;
 
             if (originalValues[1] == "slots")
             {
@@ -1665,6 +1682,11 @@ unsigned int SaveGame::HandleFakeItem(List<SaveGameItem>& curTree, unsigned int 
                     settingsBehave = DONTREPLACE;
                 }
 
+            }
+            else if (originalValues[1] == "global_variables")
+            {
+                InfoLog("found global_variables with size : " << globalVarBehaviours.size());
+                brownsingGVar = true;
             }
             else if (originalValues[1] == "relations")
             {
@@ -1738,6 +1760,15 @@ unsigned int SaveGame::HandleFakeItem(List<SaveGameItem>& curTree, unsigned int 
                 {
                     MergeSGI(&(curTree[id+i+1]),curSGI,GetSlotBehave(i,slotType));
                 }
+                else if (brownsingGVar)
+                {
+                    if (i < modInfos->int_str_globalVariables_Ids.size())
+                    {
+                        int gVarId = modInfos->GetOthersGVarId(i,originalSaveInfos->modInfos);
+                        if (gVarId >= 0)
+                            MergeSGI(&(curTree[id+gVarId+1]),curSGI,GetGVarBehave(modInfos->int_str_globalVariables_Ids[i]));
+                    }
+                }
                 else
                 {
                     MergeSGI(&(curTree[id+i+1]),curSGI,curTree[id+i+1].infos->mergeBehaviour);
@@ -1775,50 +1806,7 @@ unsigned int SaveGame::HandleFakeItem(List<SaveGameItem>& curTree, unsigned int 
 
             if (countToRemove > 0)
             {
-
-/*
-                vector<int> pathToParent = marker;
-                pathToParent.resize(pathToParent.size()-1);
-
-                if (slotType == isTroopSlot)
-                    getchar();
-
-*/
                 RemoveSGIAtMarker(&marker,countToRemove);
-/*
-                SaveGameItem* parentSGI = GetItemAtPath(&pathToParent);
-
-
-                int eraseWithChilds = 0;
-                for (int i=marker[marker.size()-1];i<(marker[marker.size()-1]+countToRemove);i++)
-                {
-                    if (parentSGI->subItems[i].subItems.size() > 0)
-                    {
-                        eraseWithChilds++;
-                    }
-                }
-
-                cout << "erase with childs : " << eraseWithChilds << endl;
-
-                //parentSGI->subItems.erase(parentSGI->subItems.begin()+marker[marker.size()-1],parentSGI->subItems.begin()+marker[marker.size()-1]+countToRemove);
-
-                eraseWithChilds = 0;
-                for (int i=marker[marker.size()-1];i<(marker[marker.size()-1]+countToRemove);i++)
-                {
-                    if (parentSGI->subItems[i].subItems.size() > 0)
-                    {
-                        eraseWithChilds++;
-                    }
-                }
-                cout << "erase with childs 2 : " << eraseWithChilds << endl;
-
-               // parentSGI->subItems.reserve(parentSGI->subItems.size());
-                //parentSGI->subItems.shrink_to_fit();
-                if (slotType == isTroopSlot)
-                {
-                    cout << "done size is now : " << GetItemAtPath(&pathToParent)->subItems.size() <<  endl;
-                    getchar();
-                }*/
             }
 
             DebugLog( " ended 3 : " << newCount << " size to remove "  << countToRemove);
@@ -2455,6 +2443,15 @@ void SaveGame::MergeSGI(SaveGameItem* originalSGI, SaveGameItem* newSGI, int mer
 }
 
 
+int SaveGame::GetGVarBehave(string name)
+{
+    map<string,int>::const_iterator itr = globalVarBehaviours.find(name);
+
+    if (itr != globalVarBehaviours.end())
+        return itr->second;
+    else
+        return DONTREPLACE;
+}
 
 int SaveGame::GetSlotBehave(int id, int slotType)
 {

@@ -20,6 +20,6 @@ CONFIG += console
 
 
 QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS += -g -fno-omit-frame-pointer
-QMAKE_CXXFLAGS += -gdwarf-2
+#QMAKE_CXXFLAGS += -g -fno-omit-frame-pointer
+#QMAKE_CXXFLAGS += -gdwarf-2
 QMAKE_CXXFLAGS += -static

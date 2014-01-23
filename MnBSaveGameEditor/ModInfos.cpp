@@ -535,3 +535,20 @@ int64_t ModInfos::GetOthersSceneId(int64_t cur_id, ModInfos* Other)
         return -666;
 }
 
+int64_t ModInfos::GetOthersGVarId(int64_t cur_id, ModInfos* Other)
+{
+    if (cur_id <= 0)
+        return cur_id;
+
+    if (cur_id >= int_str_globalVariables_Ids.size())
+        return cur_id;
+
+    string IDString = int_str_globalVariables_Ids[cur_id];
+    map<string,int64_t>::const_iterator itr = Other->str_int_globalVariables_Ids.find(IDString);
+
+    if (itr != Other->str_int_globalVariables_Ids.end())
+        return itr->second;
+    else
+        return -666;
+}
+

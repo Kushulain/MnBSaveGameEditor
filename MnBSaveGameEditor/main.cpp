@@ -50,6 +50,7 @@ string saveGameBodyName = "game";
 map<string,streamsize> typeSize;
 map<string,int64_t> watchedValues;
 map<string,string> conditionalValueSave;
+map<string,int> globalVarBehaviours;
 
 ifstream saveGameFile;
 
@@ -64,6 +65,7 @@ void LoadStructure(string filePath);
 void LoadSlotInfos(string filePath);
 void LoadSaveGame(string filePath);
 void InitializeVariables();
+void LoadGVariablesInfos(string filePath);
 
 
 
@@ -111,7 +113,7 @@ int main(int argc, char *argv[])
     cout << "size of int : " << sizeof(int) << endl;
     cout << "size of SaveGameStructureItem* : " << sizeof(SaveGameStructureItem*) << endl;*/
 
-    //ResetLogFile();
+    ResetLogFile();
     QApplication app(argc, argv);
 
 
@@ -119,15 +121,20 @@ int main(int argc, char *argv[])
     InfoLog("");
     InfoLog("====LOADING STRUCTURE FILES :");
     InfoLog("");
-    LoadStructure("SaveGameStructure.txt");
+    LoadStructure("SaveGameStructure.cfg");
 
     InfoLog("");
     InfoLog("====LOADING SLOTNAMES FILES :");
     InfoLog("");
-    LoadSlotInfos("SlotsNames.txt");
+    LoadSlotInfos("SlotsNames.cfg");
+
+    InfoLog("");
+    InfoLog("====LOADING GLOBAL VAR BEHAVIOUR FILES :");
+    InfoLog("");
+    LoadGVariablesInfos("GlobalVariablesBehaviour.cfg");
 
 
-    MainWindow* window = new MainWindow(&structureBlocks,&typeSize,&conditionalValueSave,&watchedValues,&modINIValues, &slotsInfos);
+    MainWindow* window = new MainWindow(&structureBlocks,&typeSize,&conditionalValueSave,&watchedValues,&modINIValues, &slotsInfos, &globalVarBehaviours);
     window->show();
 /*
     QPushButton bouton("Load");
@@ -185,7 +192,7 @@ void LoadStructure(string filePath)
         //Is new block name
         if (line.find("\t") == line.npos || line.find(" ") == line.npos) //there are no "space" nor "tab" within the line
         {
-            DebugLog("Loading new structure block : " << line);
+            InfoLog("Loading new structure block : " << line);
             newBlockName = line;
             structureBlocks[newBlockName] = vector<SaveGameStructureItem>();
             continue;
@@ -450,5 +457,85 @@ void LoadSlotInfos(string filePath)
         ErrorLog("Unable to find slot file : " << filePath);
    }
    InfoLog("Slot File succefully loaded. faction:" << slotsInfos.factionSlotsMaxId << " item:" << slotsInfos.itemSlotsMaxId << " party:" << slotsInfos.partySlotsMaxId << " partyTemplate:" << slotsInfos.partyTemplateSlotsMaxId << " troops:" << slotsInfos.troopSlotsMaxId);
+
+}
+
+void LoadGVariablesInfos(string filePath)
+{
+    ifstream GVarFile(filePath.c_str());
+
+    if(GVarFile)
+    {
+        string line;
+        string behave;
+        string name;
+
+        while(getline(GVarFile, line))
+        {
+            for (int i=line.size()-1; i >= 0; i--)
+              if (line[i] == '\t')
+                  line[i] = ' ';
+
+            size_t commentAddress = line.find("#");
+            if (commentAddress != line.npos)
+              line.resize(commentAddress);
+
+            if (line.size() == 0)
+              continue;
+
+
+            ///////////////////////////////////////////////////////////////////////////// split string in two
+            name = line.substr(0,line.find(":"));
+            behave = line.substr(line.find(":")+1, line.npos - (line.find(":")+1));
+
+            CleanString(behave);
+            CleanString(name);
+
+            if (behave.size() == 0 || name.size() == 0)
+              continue;
+
+            int mergeBehave = 0;
+            ///////////////////////////////////////////////////////////////////////////// behave string to int
+            if (behave == "DONTREPLACE")
+                mergeBehave = DONTREPLACE;
+            else if (behave == "REPLACE")
+                mergeBehave = REPLACE;
+            else if (behave == "CLEAR")
+                mergeBehave = CLEAR;
+
+            else if (behave == "DONTREPLACE_EXCEPTPLAYERS")
+                mergeBehave = DONTREPLACE_EXCEPTPLAYERS;
+            else if (behave == "REPLACE_EXCEPTPLAYERS")
+                mergeBehave = REPLACE_EXCEPTPLAYERS;
+
+            else if (behave == "REPLACE_BY_FACTION_ID")
+                mergeBehave = REPLACE_BY_FACTION_ID;
+            else if (behave == "REPLACE_BY_GLOBALVAR_ID")
+                mergeBehave = REPLACE_BY_GLOBALVAR_ID;
+            else if (behave == "REPLACE_BY_PARTY_ID")
+                mergeBehave = REPLACE_BY_PARTY_ID;
+            else if (behave == "REPLACE_BY_PARTY_TEMPLATE_ID")
+                 mergeBehave = REPLACE_BY_PARTY_TEMPLATE_ID;
+            else if (behave == "REPLACE_BY_PARTY_RECORD_ID")
+                mergeBehave = REPLACE_BY_PARTY_RECORD_ID;
+            else if (behave == "REPLACE_BY_QUEST_ID")
+                mergeBehave = REPLACE_BY_QUEST_ID;
+            else if (behave == "REPLACE_BY_SCENE_ID")
+                mergeBehave = REPLACE_BY_SCENE_ID;
+            else if (behave == "REPLACE_BY_TROOP_ID")
+                mergeBehave = REPLACE_BY_TROOP_ID;
+            else if (behave == "REPLACE_BY_ITEM_ID")
+                mergeBehave = REPLACE_BY_ITEM_ID;
+
+            DebugLog("Added GVar " << name << " with behaviour : " << mergeBehave);
+            globalVarBehaviours[name] = mergeBehave;
+        }
+
+   }
+   else
+   {
+        ErrorLog("Unable to find GVar behaviours file : " << filePath);
+   }
+   InfoLog("GVar behaviours File succefully loaded with " << globalVarBehaviours.size() << " new entries.");
 
 }

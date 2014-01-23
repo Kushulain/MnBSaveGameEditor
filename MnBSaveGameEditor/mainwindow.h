@@ -43,7 +43,8 @@ public:
                         map<string,string>* aConditionalValueSave,
                         map<string,int64_t>* aWatchedValues,
                         vector<string>* amodINIValues,
-                        SlotsInfos* aSlotsInfos);
+                        SlotsInfos* aSlotsInfos,
+                        map<string,int>* aGlobalVarBehaviours);
 
     QWidget* CreateTabContent(SaveGameInfos* SGInfos);
     QStringList SGItemGetData(SaveGameItem& SGI);
@@ -80,6 +81,7 @@ public:
     map<string,int64_t>* WatchedValues;
     vector<string>* modINIValues;
     SlotsInfos* slotsInfos;
+    map<string,int>* globalVarBehaviours;
 
     bool createdCheckBoxes;
 

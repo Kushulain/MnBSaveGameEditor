@@ -30,7 +30,8 @@ public:
                   map<string,int64_t> aWatchedValues,
                   vector<string>* modINIValues,
                   QProgressDialog* aProgressBar,
-                  SlotsInfos* slotsInfos);
+                  SlotsInfos* slotsInfos,
+                  map<string,int>* aGlobalVars);
 
     ~SaveGameInfos();
 
@@ -38,6 +39,7 @@ public:
     SaveGame* savegame;
     ModInfos* modInfos;
     bool loadedSuccefully;
+    bool SGCreated;
 };
 
 #endif // SAVEGAMEINFOS_H
